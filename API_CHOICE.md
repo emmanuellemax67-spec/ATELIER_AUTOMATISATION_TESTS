@@ -1,9 +1,9 @@
 # API Choice
 
-- Étudiant :
-- API choisie :
-- URL base :
-- Documentation officielle / README :
+- Étudiant : Emmanuelle MAX-MACKITA
+- API choisie : Frankfurter
+- URL base : https://api.frankfurter.app/latest?from=EUR
+- Documentation officielle / README : https://frankfurter.dev/
 - Auth : None / API Key / OAuth
 - Endpoints testés :
   - GET ...
