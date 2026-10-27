@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tableau de bord — Tests API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        h1, h2 {
+            color: #243b53;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 18px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #00000012;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            background: #1769aa;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .button:hover {
+            background: #0d4f85;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .metric {
+            background: #eef4fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 26px;
+            margin-top: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 11px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #eef4fa;
+        }
+
+        .PASS {
+            color: #147d35;
+            font-weight: bold;
+        }
+
+        .FAIL, .ERROR {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .info {
+            color: #52606d;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tableau de bord — Tests API</h1>
+    <p class="info">Suivi des tests automatisés de l'API Frankfurter.</p>
+
+    <div class="card">
+        <h2>Lancer les tests</h2>
+        <p>Exécute la suite de tests et consulte les résultats ci-dessous.</p>
+
+        <form action="/run" method="post">
+            <button class="button" type="submit">Lancer les tests API</button>
+        </form>
+
+        <p>
+            <a href="/" class="button">Retour aux consignes</a>
+        </p>
+    </div>
+
+    {% if run %}
+    <div class="card">
+        <h2>Résumé de la dernière exécution</h2>
+
+        <div class="metrics">
+            <div class="metric">
+                Total des tests
+                <strong>{{ run.total }}</strong>
+            </div>
+
+            <div class="metric">
+                Réussis
+                <strong>{{ run.passed }}</strong>
+            </div>
+
+            <div class="metric">
+                Échecs
+                <strong>{{ run.failed }}</strong>
+            </div>
+
+            <div class="metric">
+                Erreurs
+                <strong>{{ run.errors }}</strong>
+            </div>
+
+            <div class="metric">
+                Taux d'erreur
+                <strong>{{ "%.1f"|format(run.error_rate * 100) }} %</strong>
+            </div>
+
+            <div class="metric">
+                Latence moyenne
+                <strong>{{ run.latency_avg }} ms</strong>
+            </div>
+
+            <div class="metric">
+                Latence P95
+                <strong>{{ run.latency_p95 }} ms</strong>
+            </div>
+        </div>
+
+        <p class="info">Date d'exécution : {{ run.timestamp }}</p>
+    </div>
+
+    <div class="card">
+        <h2>Détail des tests</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Résultat</th>
+                        <th>Durée (ms)</th>
+                        <th>Détails</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for test in tests %}
+                    <tr>
+                        <td>{{ test.name }}</td>
+                        <td class="{{ test.status }}">{{ test.status }}</td>
+                        <td>{{ test.latency_ms }}</td>
+                        <td>{{ test.details }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="card">
+        <h2>Aucun résultat pour le moment</h2>
+        <p>Utilise le bouton ci-dessus pour lancer la première exécution.</p>
+    </div>
+    {% endif %}
+
+</body>
+</html>
